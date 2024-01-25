@@ -8,7 +8,7 @@ const port = 3000;
 
 // Define MongoDB Atlas connection URI
 //const mongoUri = 'mongodb+srv://Abdullah:abdullah123@mernapp.i1s0mmx.mongodb.net/';
-const mongoUri = "mongodb+srv://hydroponic:<password>@cluster0.oocixsh.mongodb.net/"
+const mongoUri = "mongodb+srv://hydroponic:hydroponic@cluster0.oocixsh.mongodb.net/"
 
 let client;
 
