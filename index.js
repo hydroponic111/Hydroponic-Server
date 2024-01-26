@@ -7,7 +7,6 @@ const app = express();
 const port = 3000;
 
 // Define MongoDB Atlas connection URI
-//const mongoUri = 'mongodb+srv://Abdullah:abdullah123@mernapp.i1s0mmx.mongodb.net/';
 const mongoUri = "mongodb+srv://hydroponic:hydroponic786@cluster0.oocixsh.mongodb.net/"
 
 let client;
@@ -310,7 +309,83 @@ app.get('/gethumiditysetpoint', async (req, res) => {
     }
   }
 });
+// Route to handle retrieving sensor settings and deleting the record
+app.get('/sensorsettings', async (req, res) => {
+  let client;
+  try {
+    // Connect to MongoDB Atlas
+    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
 
+    // Access the database and collection for sensor settings
+    const database = client.db('Hydroponics');
+    const collection = database.collection('SensorSettings');
+
+    // Retrieve the latest sensor settings document
+    const sensorSettings = await collection.findOne({}, { sort: { Timestamp: -1 } });
+
+    if (sensorSettings) {
+      console.log('Sensor settings retrieved from MongoDB:', sensorSettings);
+
+      // Delete all records from the collection
+      await collection.deleteMany({});
+
+      res.status(200).json({
+        status: 'OK',
+        data: {
+          FanTimer: sensorSettings.FanTimer,
+          TemperatureSetpoint: sensorSettings.TemperatureSetpoint,
+          HumiditySetpoint: sensorSettings.HumiditySetpoint
+        }
+      });
+    } else {
+      console.log('No sensor settings found in the database.');
+      res.status(404).json({ status: 'Not Found', message: 'No sensor settings found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: 'Internal Server Error', error: error.message });
+  } finally {
+    // Close the MongoDB connection
+    if (client) {
+      await client.close();
+    }
+  }
+});
+
+// Route to handle updating sensor settings
+app.post('/updatesensorsettings', async (req, res) => {
+const { FanTimer, TemperatureSetpoint, HumiditySetpoint } = req.body;
+
+try {
+  // Connect to MongoDB Atlas
+  client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+  await client.connect();
+
+  // Access the database and collection for sensor settings
+  const database = client.db('Hydroponics');
+  const collection = database.collection('SensorSettings');
+
+  // Insert document with updated sensor settings
+  const result = await collection.insertOne({
+    FanTimer,
+    TemperatureSetpoint,
+    HumiditySetpoint,
+    Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(), // Use Asia/Karachi for Pakistan Time Zone
+  });
+
+  console.log(`Sensor settings updated in MongoDB. Document inserted: ${result.insertedId}`);
+  res.status(200).json({ status: 'OK', insertedId: result.insertedId });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ status: 'Internal Server Error', error: error.message });
+} finally {
+  // Close the MongoDB connection
+  if (client) {
+    await client.close();
+  }
+}
+});
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
