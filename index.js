@@ -328,7 +328,7 @@ app.get('/sensorsettings', async (req, res) => {
       console.log('Sensor settings retrieved from MongoDB:', sensorSettings);
 
       // Delete all records from the collection
-      await collection.deleteMany({});
+      // await collection.deleteMany({});
 
       res.status(200).json({
         status: 'OK',
