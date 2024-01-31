@@ -10,7 +10,6 @@ const port = process.env.PORT || 8080;
 
 // Define MongoDB Atlas connection URI
 const mongoUri = process.env.MONGO_URI;
-// const mongoUri = "mongodb+srv://hydroponic:hydroponic786@cluster0.oocixsh.mongodb.net/"
 
 let client;
 
