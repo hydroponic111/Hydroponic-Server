@@ -356,37 +356,87 @@ app.get('/sensorsettings', async (req, res) => {
 });
 
 // Route to handle updating sensor settings
+// app.post('/updatesensorsettings', async (req, res) => {
+// const { FanTimer, TemperatureSetpoint, HumiditySetpoint } = req.body;
+
+// try {
+//   // Connect to MongoDB Atlas
+//   client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+//   await client.connect();
+
+//   // Access the database and collection for sensor settings
+//   const database = client.db('Hydroponics');
+//   const collection = database.collection('SensorSettings');
+
+//   // Insert document with updated sensor settings
+//   const result = await collection.insertOne({
+//     FanTimer,
+//     TemperatureSetpoint,
+//     HumiditySetpoint,
+//     Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(), // Use Asia/Karachi for Pakistan Time Zone
+//   });
+
+//   console.log(`Sensor settings updated in MongoDB. Document inserted: ${result.insertedId}`);
+//   res.status(200).json({ status: 'OK', insertedId: result.insertedId });
+// } catch (error) {
+//   console.error(error);
+//   res.status(500).json({ status: 'Internal Server Error', error: error.message });
+// } finally {
+//   // Close the MongoDB connection
+//   if (client) {
+//     await client.close();
+//   }
+// }
+// });
 app.post('/updatesensorsettings', async (req, res) => {
-const { FanTimer, TemperatureSetpoint, HumiditySetpoint } = req.body;
+  const { FanTimer, TemperatureSetpoint, HumiditySetpoint } = req.body;
 
-try {
-  // Connect to MongoDB Atlas
-  client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-  await client.connect();
+  let client;
 
-  // Access the database and collection for sensor settings
-  const database = client.db('Hydroponics');
-  const collection = database.collection('SensorSettings');
+  try {
+    // Connect to MongoDB Atlas
+    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
 
-  // Insert document with updated sensor settings
-  const result = await collection.insertOne({
-    FanTimer,
-    TemperatureSetpoint,
-    HumiditySetpoint,
-    Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(), // Use Asia/Karachi for Pakistan Time Zone
-  });
+    // Access the database and collection for the first sensor settings collection
+    const database1 = client.db('Hydroponics');
+    const collection1 = database1.collection('SensorSettings');
 
-  console.log(`Sensor settings updated in MongoDB. Document inserted: ${result.insertedId}`);
-  res.status(200).json({ status: 'OK', insertedId: result.insertedId });
-} catch (error) {
-  console.error(error);
-  res.status(500).json({ status: 'Internal Server Error', error: error.message });
-} finally {
-  // Close the MongoDB connection
-  if (client) {
-    await client.close();
+    // Access the database and collection for the second sensor settings collection
+    const database2 = client.db('Hydroponics');
+    const collection2 = database2.collection('UserRecords');
+
+    // Insert document with updated sensor settings into the first collection
+    const result1 = await collection1.insertOne({
+      FanTimer,
+      TemperatureSetpoint,
+      HumiditySetpoint,
+      Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(),
+    });
+
+    // Insert document with updated sensor settings into the second collection
+    const result2 = await collection2.insertOne({
+      FanTimer,
+      TemperatureSetpoint,
+      HumiditySetpoint,
+      Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(),
+    });
+
+    console.log(`Sensor settings updated in MongoDB. Document inserted in Collection 1: ${result1.insertedId}, Collection 2: ${result2.insertedId}`);
+    res.status(200).json({
+      status: 'OK',
+      insertedIdCollection1: result1.insertedId,
+      insertedIdCollection2: result2.insertedId,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: 'Internal Server Error', error: error.message });
+  } finally {
+    // Close the MongoDB connection
+    if (client) {
+      await client.close();
+    }
   }
-}
 });
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
