@@ -3,11 +3,14 @@ const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 const moment = require('moment-timezone');
 
+
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 8080;
 
 // Define MongoDB Atlas connection URI
-const mongoUri = "mongodb+srv://hydroponic:hydroponic786@cluster0.oocixsh.mongodb.net/"
+const mongoUri = process.env.MONGO_URI;
+// const mongoUri = "mongodb+srv://hydroponic:hydroponic786@cluster0.oocixsh.mongodb.net/"
 
 let client;
 
@@ -328,7 +331,7 @@ app.get('/sensorsettings', async (req, res) => {
       console.log('Sensor settings retrieved from MongoDB:', sensorSettings);
 
       // Delete all records from the collection
-      // await collection.deleteMany({});
+      await collection.deleteMany({});
 
       res.status(200).json({
         status: 'OK',
