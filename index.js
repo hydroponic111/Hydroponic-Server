@@ -284,6 +284,48 @@ app.post('/updatelighttimer', async (req, res) => {
       }
     }
   });
+
+// Route to get the latest manual light timer setting
+app.get('/getmanuallighttimer', async (req, res) => {
+  let client;
+  try {
+    // Connect to MongoDB Atlas
+    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+
+    // Access the database and collection for manual light timer settings
+    const database = client.db('Hydroponics');
+    const collection = database.collection('Manual Light');
+
+    // Retrieve the latest manual light timer setting document
+    const manualLightTimer = await collection.findOne({}, { sort: { Timestamp: -1 } });
+
+    if (manualLightTimer) {
+      console.log('Manual Light Timer setting retrieved from MongoDB:', manualLightTimer);
+      res.status(200).json({
+        status: 'OK',
+        data: {
+          manualLightTimer: manualLightTimer.LightDuration
+        }
+      });
+      // Delete all records from the collection
+      // await collection.deleteMany({});
+      // No need to delete the record after retrieval as it's not specified in the question.
+    } else {
+      console.log('No Manual Light Timer setting found in the database.');
+      res.status(404).json({ status: 'Not Found', message: 'No Manual Light Timer setting found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: 'Internal Server Error', error: error.message });
+  } finally {
+    // Close the MongoDB connection
+    if (client) {
+      await client.close();
+    }
+  }
+});
+
 // Route to get the latest Humidity Setpoint value
 app.get('/gethumiditysetpoint', async (req, res) => {
   let client;
