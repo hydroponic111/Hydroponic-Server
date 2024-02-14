@@ -388,6 +388,78 @@ app.get('/sensorsettings', async (req, res) => {
 //   }
 // }
 // });
+app.post('/updatenewsensorsettings', async (req, res) => {
+  const {
+    Temperaturelo,
+    Temperatureup,
+    Humiditylo,
+    Humidityup,
+    EClo,
+    ECup,
+    LightDuration,
+    pHlo,
+    pHup,
+  } = req.body;
+
+  let client;
+
+  try {
+    // Connect to MongoDB Atlas
+    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+
+    // Access the database and collection for the first sensor settings collection
+    const database1 = client.db('Hydroponics');
+    const collection1 = database1.collection('newSensorSettings');
+
+    // Access the database and collection for the second sensor settings collection
+    const database2 = client.db('Hydroponics');
+    const collection2 = database2.collection('newUserRecords');
+
+    // Insert document with updated sensor settings into the first collection
+    const result1 = await collection1.insertOne({
+      TemperatureLo: Temperaturelo,
+      TemperatureUp: Temperatureup,
+      HumidityLo: Humiditylo,
+      HumidityUp: Humidityup,
+      EC_Lo: EClo,
+      EC_Up: ECup,
+      LightDuration: LightDuration,
+      pH_Lo: pHlo,
+      pH_Up: pHup,
+      Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(),
+    });
+
+    // Insert document with updated sensor settings into the second collection
+    const result2 = await collection2.insertOne({
+      TemperatureLo: Temperaturelo,
+      TemperatureUp: Temperatureup,
+      HumidityLo: Humiditylo,
+      HumidityUp: Humidityup,
+      EC_Lo: EClo,
+      EC_Up: ECup,
+      LightDuration: LightDuration,
+      pH_Lo: pHlo,
+      pH_Up: pHup,
+      Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(),
+    });
+
+    console.log(`Sensor settings updated in MongoDB. Document inserted in Collection 1: ${result1.insertedId}, Collection 2: ${result2.insertedId}`);
+    res.status(200).json({
+      status: 'OK',
+      insertedIdCollection1: result1.insertedId,
+      insertedIdCollection2: result2.insertedId,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: 'Internal Server Error', error: error.message });
+  } finally {
+    // Close the MongoDB connection
+    if (client) {
+      await client.close();
+    }
+  }
+});
 app.post('/updatesensorsettings', async (req, res) => {
   const { FanTimer, TemperatureSetpoint, HumiditySetpoint } = req.body;
 
