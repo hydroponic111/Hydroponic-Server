@@ -390,15 +390,15 @@ app.get('/sensorsettings', async (req, res) => {
 // });
 app.post('/updatenewsensorsettings', async (req, res) => {
   const {
-    Temperaturelo,
-    Temperatureup,
-    Humiditylo,
-    Humidityup,
-    EClo,
-    ECup,
-    LightDuration,
-    pHlo,
-    pHup,
+    "Temperature Low": Temperaturelo,
+    "Temperature High": Temperatureup,
+    "Humidity Low": Humiditylo,
+    "Humidity High": Humidityup,
+    "pH low": pHlo,
+    "pH high": pHup,
+    "EC low": EClo,
+    "EC high": ECup,
+    "Light Duration": LightDuration,
   } = req.body;
 
   let client;
