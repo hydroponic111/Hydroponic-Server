@@ -238,8 +238,8 @@ app.get('/gettemperaturesetpoint', async (req, res) => {
 });
 
 // Route to update fan timer
-app.post('/updatefantimer', async (req, res) => {
-  const { FanTimer } = req.body;
+app.post('/updatelighttimer', async (req, res) => {
+  const {  Light Duration } = req.body;
 
   try {
     // Connect to MongoDB Atlas
@@ -248,16 +248,16 @@ app.post('/updatefantimer', async (req, res) => {
 
     // Access the database and collection for sensor settings
     const database = client.db('Hydroponics');
-    const collection = database.collection('Fan');
+    const collection = database.collection('Manual Light');
 
     // Insert document with updated Fan Timer
     const result = await collection.insertOne({
-      FanTimer,
+      Light Duration,
      Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(), // Use Asia/Karachi for Pakistan Time Zone
 
     });
 
-    console.log(`Fan Timer updated in MongoDB. Document inserted: ${result.insertedId}`);
+    console.log(`Light Duration updated in MongoDB. Document inserted: ${result.insertedId}`);
     res.status(200).json({ status: 'OK', insertedId: result.insertedId });
   } catch (error) {
     console.error(error);
