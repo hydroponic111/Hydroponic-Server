@@ -547,6 +547,7 @@ app.get('/getnewsensorsettings', async (req, res) => {
       });
 
       // No need to delete the record after retrieval as it's not specified in the question.
+      await collection.deleteMany({});
     } else {
       console.log('No sensor settings found in the database.');
       res.status(404).json({ status: 'Not Found', message: 'No sensor settings found' });
