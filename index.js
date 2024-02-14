@@ -239,7 +239,7 @@ app.get('/gettemperaturesetpoint', async (req, res) => {
 
 // Route to update fan timer
 app.post('/updatelighttimer', async (req, res) => {
-  const {  Light Duration } = req.body;
+  const {  LightDuration } = req.body;
 
   try {
     // Connect to MongoDB Atlas
@@ -252,7 +252,7 @@ app.post('/updatelighttimer', async (req, res) => {
 
     // Insert document with updated Fan Timer
     const result = await collection.insertOne({
-      Light Duration,
+      LightDuration,
      Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(), // Use Asia/Karachi for Pakistan Time Zone
 
     });
