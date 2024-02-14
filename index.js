@@ -239,37 +239,51 @@ app.get('/gettemperaturesetpoint', async (req, res) => {
 
 // Route to update fan timer
 app.post('/updatelighttimer', async (req, res) => {
-  const {  LightDuration } = req.body;
-
-  try {
-    // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-    await client.connect();
-
-    // Access the database and collection for sensor settings
-    const database = client.db('Hydroponics');
-    const collection = database.collection('Manual Light');
-
-    // Insert document with updated Fan Timer
-    const result = await collection.insertOne({
-      LightDuration,
-     Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(), // Use Asia/Karachi for Pakistan Time Zone
-
-    });
-
-    console.log(`Light Duration updated in MongoDB. Document inserted: ${result.insertedId}`);
-    res.status(200).json({ status: 'OK', insertedId: result.insertedId });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ status: 'Internal Server Error', error: error.message });
-  } finally {
-    // Close the MongoDB connection
-    if (client) {
-      await client.close();
+    const { LightDuration } = req.body;
+  
+    let client;
+  
+    try {
+      // Connect to MongoDB Atlas
+      client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+      await client.connect();
+  
+      // Access the database and collection for the first light timer collection
+      const database1 = client.db('Hydroponics');
+      const collection1 = database1.collection('Manual Light');
+  
+      // Access the database and collection for the second light timer collection
+      const database2 = client.db('Hydroponics');
+      const collection2 = database2.collection('User Light Records');
+  
+      // Insert document with updated Light Duration into the first collection
+      const result1 = await collection1.insertOne({
+        LightDuration,
+        Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(),
+      });
+  
+      // Insert document with updated Light Duration into the second collection
+      const result2 = await collection2.insertOne({
+        LightDuration,
+        Timestamp: moment().tz('Asia/Karachi').add(5, 'hours').toDate(),
+      });
+  
+      console.log(`Light Duration updated in MongoDB. Document inserted in Collection 1: ${result1.insertedId}, Collection 2: ${result2.insertedId}`);
+      res.status(200).json({
+        status: 'OK',
+        insertedIdCollection1: result1.insertedId,
+        insertedIdCollection2: result2.insertedId,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ status: 'Internal Server Error', error: error.message });
+    } finally {
+      // Close the MongoDB connection
+      if (client) {
+        await client.close();
+      }
     }
-  }
-});
-
+  });
 // Route to get the latest Humidity Setpoint value
 app.get('/gethumiditysetpoint', async (req, res) => {
   let client;
