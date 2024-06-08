@@ -16,6 +16,27 @@ let client;
 // Middleware to parse JSON data
 app.use(bodyParser.json());
 
+
+// Function to connect to MongoDB
+async function connectToMongoDB() {
+  if (!client || !client.isConnected()) {
+    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+  }
+}
+
+// Middleware to ensure MongoDB connection is established
+app.use(async (req, res, next) => {
+  try {
+    await connectToMongoDB();
+    next();
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    res.status(500).json({ status: 'Internal Server Error', error: error.message });
+  }
+});
+
+
 // Route to handle retrieving the latest sensor data
 app.get('/getsensordata', async (req, res) => {
   try {
