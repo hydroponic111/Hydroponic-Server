@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.get('/getsensordata', async (req, res) => {
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for sensor data
@@ -57,7 +57,7 @@ app.post('/sensordata', async (req, res) => {
 
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection
@@ -92,7 +92,7 @@ app.get('/getfantimer', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for sensor settings
@@ -135,7 +135,7 @@ app.post('/updatehumiditysetpoint', async (req, res) => {
 
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for sensor settings
@@ -168,7 +168,7 @@ app.post('/updatetemperaturesetpoint', async (req, res) => {
 
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for sensor settings
@@ -200,7 +200,7 @@ app.get('/gettemperaturesetpoint', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for sensor settings
@@ -245,7 +245,7 @@ app.post('/updatelighttimer', async (req, res) => {
   
     try {
       // Connect to MongoDB Atlas
-      client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+      client = new MongoClient(mongoUri);
       await client.connect();
   
       // Access the database and collection for the first light timer collection
@@ -290,7 +290,7 @@ app.get('/getmanuallighttimer', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for manual light timer settings
@@ -331,7 +331,7 @@ app.get('/gethumiditysetpoint', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for sensor settings
@@ -372,7 +372,7 @@ app.get('/sensorsettings', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for sensor settings
@@ -417,7 +417,7 @@ app.get('/sensorsettings', async (req, res) => {
 
 // try {
 //   // Connect to MongoDB Atlas
-//   client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+//   client = new MongoClient(mongoUri);
 //   await client.connect();
 
 //   // Access the database and collection for sensor settings
@@ -461,7 +461,7 @@ app.post('/updatenewsensorsettings', async (req, res) => {
 
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for the first sensor settings collection
@@ -523,7 +523,7 @@ app.post('/updatesensorsettings', async (req, res) => {
 
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for the first sensor settings collection
@@ -571,7 +571,7 @@ app.get('/getnewsensorsettings', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    client = new MongoClient(mongoUri);
     await client.connect();
 
     // Access the database and collection for sensor settings
