@@ -16,13 +16,17 @@ let client;
 // Middleware to parse JSON data
 app.use(bodyParser.json());
 
+async function connectToMongo() {
+    const client = new MongoClient(mongoUri); // Create a new MongoDB client
+    await client.connect(); // Connect to MongoDB
+    return client; // Return the connected client
+}
 
 // Route to handle retrieving the latest sensor data
 app.get('/getsensordata', async (req, res) => {
+let client; // Declare client variable
   try {
-    // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+    client = await connectToMongo(); // Establish connection to MongoDB
 
     // Access the database and collection for sensor data
     const database = client.db('Hydroponics');
@@ -55,11 +59,11 @@ app.get('/getsensordata', async (req, res) => {
 // Route to handle incoming sensor data
 app.post('/sensordata', async (req, res) => {
   const sensorData = req.body;
-
+  let client; // Declare client variable
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection
     const database = client.db('Hydroponics');
@@ -93,8 +97,8 @@ app.get('/getfantimer', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for sensor settings
     const database = client.db('Hydroponics');
@@ -136,8 +140,8 @@ app.post('/updatehumiditysetpoint', async (req, res) => {
 
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for sensor settings
     const database = client.db('Hydroponics');
@@ -169,8 +173,8 @@ app.post('/updatetemperaturesetpoint', async (req, res) => {
 
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for sensor settings
     const database = client.db('Hydroponics');
@@ -201,8 +205,8 @@ app.get('/gettemperaturesetpoint', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for sensor settings
     const database = client.db('Hydroponics');
@@ -246,8 +250,8 @@ app.post('/updatelighttimer', async (req, res) => {
   
     try {
       // Connect to MongoDB Atlas
-      client = new MongoClient(mongoUri);
-      await client.connect();
+     client = await connectToMongo(); // Establish connection to MongoDB
+      
   
       // Access the database and collection for the first light timer collection
       const database1 = client.db('Hydroponics');
@@ -291,8 +295,8 @@ app.get('/getmanuallighttimer', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for manual light timer settings
     const database = client.db('Hydroponics');
@@ -332,8 +336,8 @@ app.get('/gethumiditysetpoint', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for sensor settings
     const database = client.db('Hydroponics');
@@ -373,8 +377,8 @@ app.get('/sensorsettings', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for sensor settings
     const database = client.db('Hydroponics');
@@ -418,8 +422,8 @@ app.get('/sensorsettings', async (req, res) => {
 
 // try {
 //   // Connect to MongoDB Atlas
-//   client = new MongoClient(mongoUri);
-//   await client.connect();
+//  client = await connectToMongo(); // Establish connection to MongoDB
+//   
 
 //   // Access the database and collection for sensor settings
 //   const database = client.db('Hydroponics');
@@ -462,8 +466,8 @@ app.post('/updatenewsensorsettings', async (req, res) => {
 
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for the first sensor settings collection
     const database1 = client.db('Hydroponics');
@@ -524,8 +528,8 @@ app.post('/updatesensorsettings', async (req, res) => {
 
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for the first sensor settings collection
     const database1 = client.db('Hydroponics');
@@ -572,8 +576,8 @@ app.get('/getnewsensorsettings', async (req, res) => {
   let client;
   try {
     // Connect to MongoDB Atlas
-    client = new MongoClient(mongoUri);
-    await client.connect();
+   client = await connectToMongo(); // Establish connection to MongoDB
+    
 
     // Access the database and collection for sensor settings
     const database = client.db('Hydroponics');
